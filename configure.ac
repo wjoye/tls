@@ -2,6 +2,14 @@
 dnl	This file is an input file used by the GNU "autoconf" program to
 dnl	generate the file "configure", which is run during Tcl installation
 dnl	to configure the system for the local environment.
+dnl 
+dnl This file contains code to generate "tls" using either the
+dnl OpenSSL libraries or libraries from the commercial BSAFE SSL-C
+dnl product from RSA Security.  In the United States, it is necessary
+dnl to use the RSA BSAFE libraries for any product developed for
+dnl commercial use. Licensing information for BSAFE SSL-C may be
+dnl obtained from RSA Data Scurity Inc., San Mateo, California, USA.
+dnl Their home page on the web is "www.rsasecurity.com". 
 
 #-----------------------------------------------------------------------
 # Sample configure.ac for Tcl Extensions.  The only places you should
@@ -93,15 +101,9 @@ TEA_ADD_TCL_SOURCES([tls.tcl])
 
 #CLEANFILES="$CLEANFILES pkgIndex.tcl"
 if test "${TEA_PLATFORM}" = "windows" ; then
-    # Ensure no empty if clauses
-    :
-    #TEA_ADD_SOURCES([win/winFile.c])
-    #TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
+    AC_DEFINE(BUILD_tls)
+    AC_DEFINE(WINDOWS)
 else
-    # Ensure no empty else clauses
-    :
-    #TEA_ADD_SOURCES([unix/unixFile.c])
-    #TEA_ADD_LIBS([-lsuperfly])
 fi
 
 #--------------------------------------------------------------------
