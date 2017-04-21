@@ -100,10 +100,19 @@ TEA_ADD_TCL_SOURCES([tls.tcl])
 #--------------------------------------------------------------------
 
 #CLEANFILES="$CLEANFILES pkgIndex.tcl"
+CLEANFILES="$CLEANFILES tlsConfig.sh"
 if test "${TEA_PLATFORM}" = "windows" ; then
-    AC_DEFINE(BUILD_tls)
-    AC_DEFINE(WINDOWS)
+    # Ensure no empty if clauses
+    :
+    #TEA_ADD_SOURCES([win/winFile.c])
+    #TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
+    #    AC_DEFINE(BUILD_tls)
+    #    AC_DEFINE(WINDOWS)
 else
+    # Ensure no empty else clauses
+    :
+    #TEA_ADD_SOURCES([unix/unixFile.c])
+    #TEA_ADD_LIBS([-lsuperfly])
 fi
 
 #--------------------------------------------------------------------
@@ -219,9 +228,15 @@ TEA_PROG_TCLSH
 #TEA_PROG_WISH
 
 #--------------------------------------------------------------------
+# These are for tlsConfig.sh
+#--------------------------------------------------------------------
+
+TEA_EXPORT_CONFIG([tls])
+
+#--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.
 # You may alternatively have a special pkgIndex.tcl.in or other files
 # which require substituting th AC variables in.  Include these here.
 #--------------------------------------------------------------------
 
-AC_OUTPUT([Makefile pkgIndex.tcl])
+AC_OUTPUT([Makefile pkgIndex.tcl tlsConfig.sh])

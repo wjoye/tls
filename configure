@@ -620,6 +620,15 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+PATCHLEVEL
+MINOR_VERSION
+MAJOR_VERSION
+tls_STUB_LIB_PATH
+tls_BUILD_STUB_LIB_PATH
+tls_STUB_LIB_SPEC
+tls_BUILD_STUB_LIB_SPEC
+tls_LIB_SPEC
+tls_BUILD_LIB_SPEC
 TCLSH_PROG
 PRACTCL_NAME_LIBRARY
 PRACTCL_VC_MANIFEST_EMBED_EXE
@@ -5478,11 +5487,14 @@ done
 #--------------------------------------------------------------------
 
 #CLEANFILES="$CLEANFILES pkgIndex.tcl"
+CLEANFILES="$CLEANFILES tlsConfig.sh"
 if test "${TEA_PLATFORM}" = "windows" ; then
     # Ensure no empty if clauses
     :
     #TEA_ADD_SOURCES([win/winFile.c])
     #TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
+    #    AC_DEFINE(BUILD_tls)
+    #    AC_DEFINE(WINDOWS)
 else
     # Ensure no empty else clauses
     :
@@ -9095,12 +9107,49 @@ $as_echo "${TCLSH_PROG}" >&6; }
 #TEA_PROG_WISH
 
 #--------------------------------------------------------------------
+# These are for tlsConfig.sh
+#--------------------------------------------------------------------
+
+
+    #--------------------------------------------------------------------
+    # These are for tlsConfig.sh
+    #--------------------------------------------------------------------
+
+    # pkglibdir must be a fully qualified path and (not ${exec_prefix}/lib)
+    eval pkglibdir="${libdir}/tls${PACKAGE_VERSION}"
+    if test "${TCL_LIB_VERSIONS_OK}" = "ok"; then
+	eval tls_LIB_FLAG="-ltls${PACKAGE_VERSION}${DBGX}"
+	eval tls_STUB_LIB_FLAG="-ltlsstub${PACKAGE_VERSION}${DBGX}"
+    else
+	eval tls_LIB_FLAG="-ltls`echo ${PACKAGE_VERSION} | tr -d .`${DBGX}"
+	eval tls_STUB_LIB_FLAG="-ltlsstub`echo ${PACKAGE_VERSION} | tr -d .`${DBGX}"
+    fi
+    tls_BUILD_LIB_SPEC="-L`$CYGPATH $(pwd)` ${tls_LIB_FLAG}"
+    tls_LIB_SPEC="-L`$CYGPATH ${pkglibdir}` ${tls_LIB_FLAG}"
+    tls_BUILD_STUB_LIB_SPEC="-L`$CYGPATH $(pwd)` ${tls_STUB_LIB_FLAG}"
+    tls_STUB_LIB_SPEC="-L`$CYGPATH ${pkglibdir}` ${tls_STUB_LIB_FLAG}"
+    tls_BUILD_STUB_LIB_PATH="`$CYGPATH $(pwd)`/${PKG_STUB_LIB_FILE}"
+    tls_STUB_LIB_PATH="`$CYGPATH ${pkglibdir}`/${PKG_STUB_LIB_FILE}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+#--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.
 # You may alternatively have a special pkgIndex.tcl.in or other files
 # which require substituting th AC variables in.  Include these here.
 #--------------------------------------------------------------------
 
-ac_config_files="$ac_config_files Makefile pkgIndex.tcl"
+ac_config_files="$ac_config_files Makefile pkgIndex.tcl tlsConfig.sh"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -9811,6 +9860,7 @@ do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "pkgIndex.tcl") CONFIG_FILES="$CONFIG_FILES pkgIndex.tcl" ;;
+    "tlsConfig.sh") CONFIG_FILES="$CONFIG_FILES tlsConfig.sh" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
