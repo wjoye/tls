@@ -2,14 +2,6 @@
 dnl	This file is an input file used by the GNU "autoconf" program to
 dnl	generate the file "configure", which is run during Tcl installation
 dnl	to configure the system for the local environment.
-dnl 
-dnl This file contains code to generate "tls" using either the
-dnl OpenSSL libraries or libraries from the commercial BSAFE SSL-C
-dnl product from RSA Security.  In the United States, it is necessary
-dnl to use the RSA BSAFE libraries for any product developed for
-dnl commercial use. Licensing information for BSAFE SSL-C may be
-dnl obtained from RSA Data Scurity Inc., San Mateo, California, USA.
-dnl Their home page on the web is "www.rsasecurity.com". 
 
 #-----------------------------------------------------------------------
 # Sample configure.ac for Tcl Extensions.  The only places you should
@@ -35,7 +27,7 @@ AC_INIT([tls], [1.6.7])
 # as well as PKG_LIB_FILE and PKG_STUB_LIB_FILE.
 #--------------------------------------------------------------------
 
-TEA_INIT([3.10])
+TEA_INIT()
 
 AC_CONFIG_AUX_DIR(tclconfig)
 
@@ -80,7 +72,7 @@ TEA_SETUP_COMPILER
 #-----------------------------------------------------------------------
 
 TEA_ADD_SOURCES([tls.c tlsIO.c tlsBIO.c tlsX509.c fixstrtod.c])
-TEA_ADD_HEADERS([tls.h])
+TEA_ADD_HEADERS([])
 TEA_ADD_INCLUDES([])
 TEA_ADD_LIBS([])
 TEA_ADD_CFLAGS([])
@@ -105,8 +97,6 @@ if test "${TEA_PLATFORM}" = "windows" ; then
     :
     #TEA_ADD_SOURCES([win/winFile.c])
     #TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
-    #    AC_DEFINE(BUILD_tls)
-    #    AC_DEFINE(WINDOWS)
 else
     # Ensure no empty else clauses
     :
@@ -227,15 +217,24 @@ TEA_PROG_TCLSH
 #TEA_PROG_WISH
 
 #--------------------------------------------------------------------
-# These are for tlsConfig.sh
+# Setup a *Config.sh.in configuration file.
 #--------------------------------------------------------------------
 
 TEA_EXPORT_CONFIG([tls])
+#AC_SUBST(SAMPLE_VAR)
 
 #--------------------------------------------------------------------
-# Finally, substitute all of the various values into the Makefile.
-# You may alternatively have a special pkgIndex.tcl.in or other files
-# which require substituting th AC variables in.  Include these here.
+# Specify files to substitute AC variables in. You may alternatively
+# have a special pkgIndex.tcl.in or other files which require
+# substituting the AC variables in. Include these here.
 #--------------------------------------------------------------------
 
-AC_OUTPUT([Makefile pkgIndex.tcl tlsConfig.sh])
+AC_CONFIG_FILES([Makefile pkgIndex.tcl])
+AC_CONFIG_FILES([tlsConfig.sh])
+
+#--------------------------------------------------------------------
+# Finally, substitute all of the various values into the files
+# specified with AC_CONFIG_FILES.
+#--------------------------------------------------------------------
+
+AC_OUTPUT()
