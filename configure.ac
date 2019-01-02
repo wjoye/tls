@@ -72,7 +72,7 @@ TEA_SETUP_COMPILER
 #-----------------------------------------------------------------------
 
 TEA_ADD_SOURCES([tls.c tlsIO.c tlsBIO.c tlsX509.c fixstrtod.c])
-TEA_ADD_HEADERS([])
+TEA_ADD_HEADERS([tls.h])
 TEA_ADD_INCLUDES([])
 TEA_ADD_LIBS([])
 TEA_ADD_CFLAGS([])
